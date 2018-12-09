@@ -7,20 +7,19 @@ def will_react(a,b):
     return a.lower() == b.lower() and not a == b
 
 def collapse(polymer):
-    prev = polymer[0]
-    changed = False
+    output = []
+    output.append(polymer[0])
     for i in range(1,len(polymer)):
-        if will_react(polymer[i], prev):
-            polymer = polymer[:i-1] + polymer[i+1:]
-            changed = True
-            break
-        prev = polymer[i]
-    return polymer, changed
+        if len(output) > 0:
+            top_of_stack = output[-1]
+        if len(output) > 0 and will_react(top_of_stack, polymer[i]):
+            output.pop()
+        else:
+            output.append(polymer[i])
+    return output
 
 def get_fully_collapsed_length(polymer):
-    changed = True
-    while(changed):
-        polymer, changed = collapse(polymer)
+    polymer  = collapse(polymer)
     return len(polymer)
 
 shortest_len = 99999999999
